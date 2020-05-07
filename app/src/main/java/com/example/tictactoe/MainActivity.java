@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         textViewPlayer1 = findViewById(R.id.text_view_p1);
         textViewPlayer2 = findViewById(R.id.text_view_p2);
-
+        updatePointsText();
         // Loops through all buttons
         for(int i = 0; i<3;i++){
             for(int j = 0;j<3;j++){
@@ -133,8 +133,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     // Updates the score board
     private void updatePointsText(){
-        textViewPlayer1.setText("Player 1 :" + player1Points);
-        textViewPlayer2.setText("Player 2 :" + player2Points);
+        textViewPlayer1.setText("Player 1 : " + player1Points);
+        textViewPlayer2.setText("Player 2 : " + player2Points);
     }
     // Resets all the buttons back to "", round count = 0, player 1 begins again
     private void resetBoard(){
