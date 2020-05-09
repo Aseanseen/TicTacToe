@@ -54,30 +54,122 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Player 1 is X
         if (player1Turn){
             ((Button)v).setText("X");
+            aiNextMove();
         }
         // Player 2 is O
-        else{
-            ((Button) v).setText("O");
-        }
+//        else{
+//            aiNextMove();
+//            ((Button) v).setText("O");
+//        }
         // Increases round count
         roundCount++;
+        switch (whoWins()){
+            case 0: draw(); break;
+            case 1: player1Wins(); break;
+            case 2: player2Wins(); break;
+            case -1: break;
+        }
 
+        // Alternate turns
+//        else {
+//            player1Turn = !player1Turn;
+//        }
+    }
+
+    // Best move made by AI
+    private void aiNextMove(){
+        int bestScore = Integer.MIN_VALUE;
+        int[] bestMove = new int[]{0,0};
+        for(int i = 0; i<3;i++) {
+            for (int j = 0; j < 3; j++) {
+                // Spot is available
+                if (buttons[i][j].getText().toString() == ""){
+                    buttons[i][j].setText("O");
+                    int score = minimax(buttons,false);
+                    buttons[i][j].setText("");
+                    if (score > bestScore){
+                        bestScore = score;
+                        bestMove = new int[]{i, j};
+                    }
+                }
+            }
+        }
+        buttons[bestMove[0]][bestMove[1]].setText("O");
+    }
+    private int minimax(Button buttons[][], boolean maximising) {
+        int winner = whoWins();
+        int score;
+        int bestScore;
+        // Game has ended
+        if (winner != -1){
+            switch (winner) {
+                // Draw
+                case 0: return 0;
+                // Player wins
+                case 1: return -1;
+                // AI wins
+                case 2: return 1;
+            }
+        }
+        if (maximising) {
+            bestScore = Integer.MIN_VALUE;
+            for(int i = 0; i<3;i++) {
+                for (int j = 0; j < 3; j++) {
+                    // Spot is available
+                    if (buttons[i][j].getText().toString() == "") {
+                        // Maximising because its AI's simulated turn
+                        buttons[i][j].setText("O");
+                        // Next turn is to minimise aka Player
+                        score = minimax(buttons, false);
+                        buttons[i][j].setText("");
+                        // Find the max score for the AI aka AI does their best move
+                        if (score > bestScore) {
+                            bestScore = score;
+                        }
+                    }
+                }
+            }
+            return bestScore;
+        }
+        else {
+            bestScore = Integer.MAX_VALUE;
+            for(int i = 0; i<3;i++) {
+                for (int j = 0; j < 3; j++) {
+                    // Spot is available
+                    if (buttons[i][j].getText().toString() == "") {
+                        buttons[i][j].setText("X");
+                        // Next turn is to maximise aka AI
+                        score = minimax(buttons, true);
+                        buttons[i][j].setText("");
+                        // Find the min score for the Player aka Player does their best move
+                        if (score < bestScore) {
+                            bestScore = score;
+                        }
+                    }
+                }
+            }
+            return bestScore;
+        }
+    }
+    private int whoWins(){
         // Check which player won
         if (checkForWin()){
             if (player1Turn){
-                player1Wins();
+//                player1Wins();
+                return 1;
             }
             else{
-                player2Wins();
+//                player2Wins();
+                return 2;
             }
         }
         // 9 rounds have passed, draw
         else if (roundCount == 9){
-            draw();
+//            draw();
+            return 0;
         }
-        // Alternate turns
-        else {
-            player1Turn = !player1Turn;
+        else{
+            return -1;
         }
     }
     // Checks if a game is won
