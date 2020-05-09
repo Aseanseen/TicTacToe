@@ -51,10 +51,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (!((Button)v).getText().toString().equals("")){
             return;
         }
+        roundCount++;
         // Player 1 is X
-        if (player1Turn){
-            ((Button)v).setText("X");
-            aiNextMove();
+        ((Button)v).setText("X");
+        String[][] board = new String[3][3];
+        // Loops through all buttons and gets the status, e.g. strings "X" or "O" or ""
+        for(int i = 0; i<3;i++){
+            for(int j = 0;j<3;j++){
+                board[i][j] = buttons[i][j].getText().toString();
+            }
+        }
+        switch (whoWins(board)){
+            case 0: draw(); break;
+            case 1: player1Wins(); break;
+            case 2: player2Wins(); break;
+            case -1: aiNextMove(); break;
+        }
+        // Loops through all buttons and gets the status, e.g. strings "X" or "O" or ""
+        for(int i = 0; i<3;i++){
+            for(int j = 0;j<3;j++){
+                board[i][j] = buttons[i][j].getText().toString();
+            }
+        }
+        switch (whoWins(board)){
+            case 0: draw(); break;
+            case 1: player1Wins(); break;
+            case 2: player2Wins(); break;
         }
         // Player 2 is O
 //        else{
@@ -62,13 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            ((Button) v).setText("O");
 //        }
         // Increases round count
-        roundCount++;
-        switch (whoWins()){
-            case 0: draw(); break;
-            case 1: player1Wins(); break;
-            case 2: player2Wins(); break;
-            case -1: break;
-        }
+
 
         // Alternate turns
 //        else {
@@ -78,15 +94,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // Best move made by AI
     private void aiNextMove(){
+        String[][] state = new String[3][3];
         int bestScore = Integer.MIN_VALUE;
         int[] bestMove = new int[]{0,0};
+        int score;
+
+        // Loops through all buttons and gets the status, e.g. strings "X" or "O" or ""
+        for(int i = 0; i<3;i++){
+            for(int j = 0;j<3;j++){
+                state[i][j] = buttons[i][j].getText().toString();
+            }
+        }
         for(int i = 0; i<3;i++) {
             for (int j = 0; j < 3; j++) {
                 // Spot is available
-                if (buttons[i][j].getText().toString() == ""){
-                    buttons[i][j].setText("O");
-                    int score = minimax(buttons,false);
-                    buttons[i][j].setText("");
+                if (state[i][j] == ""){
+                    state[i][j] = "O";
+                    score = minimax(state,false);
                     if (score > bestScore){
                         bestScore = score;
                         bestMove = new int[]{i, j};
@@ -96,8 +120,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         buttons[bestMove[0]][bestMove[1]].setText("O");
     }
-    private int minimax(Button buttons[][], boolean maximising) {
-        int winner = whoWins();
+    private int minimax(String[][] state, boolean maximising) {
+        int winner = whoWins(state);
         int score;
         int bestScore;
         // Game has ended
@@ -116,12 +140,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             for(int i = 0; i<3;i++) {
                 for (int j = 0; j < 3; j++) {
                     // Spot is available
-                    if (buttons[i][j].getText().toString() == "") {
+                    if (state[i][j] == "") {
                         // Maximising because its AI's simulated turn
-                        buttons[i][j].setText("O");
+                        state[i][j] = "O";
                         // Next turn is to minimise aka Player
-                        score = minimax(buttons, false);
-                        buttons[i][j].setText("");
+                        score = minimax(state, false);
                         // Find the max score for the AI aka AI does their best move
                         if (score > bestScore) {
                             bestScore = score;
@@ -136,11 +159,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             for(int i = 0; i<3;i++) {
                 for (int j = 0; j < 3; j++) {
                     // Spot is available
-                    if (buttons[i][j].getText().toString() == "") {
-                        buttons[i][j].setText("X");
+                    if (state[i][j] == "") {
+                        state[i][j]= "X";
                         // Next turn is to maximise aka AI
-                        score = minimax(buttons, true);
-                        buttons[i][j].setText("");
+                        score = minimax(state, true);
                         // Find the min score for the Player aka Player does their best move
                         if (score < bestScore) {
                             bestScore = score;
@@ -151,70 +173,87 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return bestScore;
         }
     }
-    private int whoWins(){
-        // Check which player won
-        if (checkForWin()){
-            if (player1Turn){
-//                player1Wins();
-                return 1;
-            }
-            else{
-//                player2Wins();
-                return 2;
-            }
+    private int whoWins(String[][] state){
+        // Player won
+        if (checkForWin(state) == 1){
+            return 1;
+        }
+        // AI won
+        if (checkForWin(state) == 2){
+            return 2;
         }
         // 9 rounds have passed, draw
         else if (roundCount == 9){
-//            draw();
             return 0;
         }
+        // No win yet
         else{
             return -1;
         }
     }
     // Checks if a game is won
-    private boolean checkForWin(){
-        String[][] field = new String[3][3];
+    private int checkForWin(String[][] field){
+//        String[][] field = new String[3][3];
         // Loops through all buttons and gets the status, e.g. strings "X" or "O" or ""
-        for(int i = 0; i<3;i++){
-            for(int j = 0;j<3;j++){
-                field[i][j] = buttons[i][j].getText().toString();
-            }
-        }
+//        for(int i = 0; i<3;i++){
+//            for(int j = 0;j<3;j++){
+//                field[i][j] = buttons[i][j].getText().toString();
+//            }
+//        }
         // Checking rows for win
         for(int i = 0; i<3;i++){
             if (field[i][0].equals(field[i][1]) && field[i][0].equals(field[i][2]) && !field[i][0].equals("")){
-                return true;
+                if (field[i][0].equals("X")) {
+                    return 1;
+                }
+                else{
+                    return 2;
+                }
             }
         }
         // Checking columns for win
         for(int i = 0; i<3;i++){
             if (field[0][i].equals(field[1][i]) && field[0][i].equals(field[2][i]) && !field[0][i].equals("")){
-                return true;
+                if (field[0][i].equals("X")) {
+                    return 1;
+                }
+                else{
+                    return 2;
+                }
             }
         }
         // Checking left to right diagonal for win
         if (field[0][0].equals(field[1][1]) && field[0][0].equals(field[2][2]) && !field[0][0].equals("")){
-            return true;
+            if (field[0][0].equals("X")) {
+                return 1;
+            }
+            else{
+                return 2;
+            }
         }
         // Checking right to left diagonal for win
         if (field[0][2].equals(field[1][1]) && field[0][2].equals(field[2][0]) && !field[0][2].equals("")){
-            return true;
+            if (field[0][2].equals("X")) {
+                return 1;
+            }
+            else{
+                return 2;
+            }
         }
         // No win
-        return false;
+        return -1;
     }
     private void player1Wins(){
         player1Points++;
         // Announces the winner
-        Toast.makeText(this,"Player 1 wins!",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"Player wins!",Toast.LENGTH_SHORT).show();
         updatePointsText();
         resetBoard();
     }
     private void player2Wins(){
         player2Points++;
         // Announces the winner
-        Toast.makeText(this,"Player 2 wins!",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"AI wins!",Toast.LENGTH_SHORT).show();
         updatePointsText();
         resetBoard();
     }
@@ -225,8 +264,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     // Updates the score board
     private void updatePointsText(){
-        textViewPlayer1.setText("Player 1 : " + player1Points);
-        textViewPlayer2.setText("Player 2 : " + player2Points);
+        textViewPlayer1.setText("Player : " + player1Points);
+        textViewPlayer2.setText("AI : " + player2Points);
     }
     // Resets all the buttons back to "", round count = 0, player 1 begins again
     private void resetBoard(){
