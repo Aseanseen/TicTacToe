@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         state[i][j] = "O";
                         // Next turn is to minimise aka Player
                         score = minimax(state, false);
+                        state[i][j] = "";
                         // Find the max score for the AI aka AI does their best move
                         if (score > bestScore) {
                             bestScore = score;
@@ -163,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         state[i][j]= "X";
                         // Next turn is to maximise aka AI
                         score = minimax(state, true);
+                        state[i][j] = "";
                         // Find the min score for the Player aka Player does their best move
                         if (score < bestScore) {
                             bestScore = score;
