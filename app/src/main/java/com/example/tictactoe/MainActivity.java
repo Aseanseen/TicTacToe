@@ -61,11 +61,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 board[i][j] = buttons[i][j].getText().toString();
             }
         }
-        switch (whoWins(board)){
-            case 0: draw(); break;
-            case 1: player1Wins(); break;
-            case 2: player2Wins(); break;
-            case -1: aiNextMove(); break;
+        if (whoWins(board) == -1){
+            aiNextMove();
         }
         // Loops through all buttons and gets the status, e.g. strings "X" or "O" or ""
         for(int i = 0; i<3;i++){
@@ -78,25 +75,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 1: player1Wins(); break;
             case 2: player2Wins(); break;
         }
-        // Player 2 is O
-//        else{
-//            aiNextMove();
-//            ((Button) v).setText("O");
-//        }
-        // Increases round count
-
-
-        // Alternate turns
-//        else {
-//            player1Turn = !player1Turn;
-//        }
     }
 
     // Best move made by AI
     private void aiNextMove(){
         String[][] state = new String[3][3];
         int bestScore = Integer.MIN_VALUE;
-        int[] bestMove = new int[]{0,0};
+        int[] bestMove = new int[2];
         int score;
 
         // Loops through all buttons and gets the status, e.g. strings "X" or "O" or ""
@@ -105,13 +90,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 state[i][j] = buttons[i][j].getText().toString();
             }
         }
+
+        for(int i = 0; i<3;i++){
+            for(int j = 0;j<3;j++){
+                if (state[i][j] != "") {
+                    System.out.print("I is "+ i);
+                    System.out.print(" J is "+ j);
+                    System.out.println(" State is " +state[i][j]);
+                }
+            }
+        }
+
         for(int i = 0; i<3;i++) {
             for (int j = 0; j < 3; j++) {
                 // Spot is available
-                if (state[i][j] == ""){
+                if (state[i][j].equals("")){
                     state[i][j] = "O";
-                    score = minimax(state,false);
-                    if (score > bestScore){
+                    for(int k = 0; k<3;k++){
+                        for(int l = 0;l<3;l++){
+                            if (state[k][l] != "") {
+                                System.out.print("k is "+ k);
+                                System.out.print(" l is "+ l);
+                                System.out.println(" State is " +state[k][l]);
+                            }
+                        }
+                    }
+                    score = minimax(state,0,false);
+                    System.out.println(score);
+                    state[i][j] = "";
+                    if (score > bestScore) {
                         bestScore = score;
                         bestMove = new int[]{i, j};
                     }
@@ -120,36 +127,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         buttons[bestMove[0]][bestMove[1]].setText("O");
     }
-    private int minimax(String[][] state, boolean maximising) {
-        int winner = whoWins(state);
-        int score;
+
+    private int minimax(String[][] state, int depth, boolean maximising) {
+        int winner;
         int bestScore;
+        winner = whoWins(state);
         // Game has ended
         if (winner != -1){
             switch (winner) {
                 // Draw
                 case 0: return 0;
-                // Player wins
-                case 1: return -1;
-                // AI wins
-                case 2: return 1;
+                // Player wins X
+                case 1: return -10 + depth;
+                // AI wins O
+                case 2: return 10 - depth;
             }
         }
         if (maximising) {
             bestScore = Integer.MIN_VALUE;
-            for(int i = 0; i<3;i++) {
+            for(int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     // Spot is available
-                    if (state[i][j] == "") {
+                    if (state[i][j].equals("")) {
                         // Maximising because its AI's simulated turn
                         state[i][j] = "O";
                         // Next turn is to minimise aka Player
-                        score = minimax(state, false);
+                        bestScore = Math.max(minimax(state, depth+1,false), bestScore);
                         state[i][j] = "";
-                        // Find the max score for the AI aka AI does their best move
-                        if (score > bestScore) {
-                            bestScore = score;
-                        }
                     }
                 }
             }
@@ -160,15 +164,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             for(int i = 0; i<3;i++) {
                 for (int j = 0; j < 3; j++) {
                     // Spot is available
-                    if (state[i][j] == "") {
+                    if (state[i][j].equals("")) {
                         state[i][j]= "X";
-                        // Next turn is to maximise aka AI
-                        score = minimax(state, true);
+                        bestScore = Math.min(minimax(state, depth+1,true), bestScore);
                         state[i][j] = "";
-                        // Find the min score for the Player aka Player does their best move
-                        if (score < bestScore) {
-                            bestScore = score;
-                        }
                     }
                 }
             }
@@ -184,8 +183,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (checkForWin(state) == 2){
             return 2;
         }
-        // 9 rounds have passed, draw
-        else if (roundCount == 9){
+        // 5 rounds have passed, draw
+        else if (roundCount == 5){
             return 0;
         }
         // No win yet
@@ -195,13 +194,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     // Checks if a game is won
     private int checkForWin(String[][] field){
-//        String[][] field = new String[3][3];
-        // Loops through all buttons and gets the status, e.g. strings "X" or "O" or ""
-//        for(int i = 0; i<3;i++){
-//            for(int j = 0;j<3;j++){
-//                field[i][j] = buttons[i][j].getText().toString();
-//            }
-//        }
         // Checking rows for win
         for(int i = 0; i<3;i++){
             if (field[i][0].equals(field[i][1]) && field[i][0].equals(field[i][2]) && !field[i][0].equals("")){
