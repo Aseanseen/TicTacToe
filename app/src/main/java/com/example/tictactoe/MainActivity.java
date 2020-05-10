@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 state[i][j] = buttons[i][j].getText().toString();
             }
         }
-
+/*
         for(int i = 0; i<3;i++){
             for(int j = 0;j<3;j++){
                 if (state[i][j] != "") {
@@ -100,23 +100,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
-
+*/
         for(int i = 0; i<3;i++) {
             for (int j = 0; j < 3; j++) {
                 // Spot is available
                 if (state[i][j].equals("")){
                     state[i][j] = "O";
-                    for(int k = 0; k<3;k++){
-                        for(int l = 0;l<3;l++){
-                            if (state[k][l] != "") {
-                                System.out.print("k is "+ k);
-                                System.out.print(" l is "+ l);
-                                System.out.println(" State is " +state[k][l]);
-                            }
-                        }
-                    }
                     score = minimax(state,0,false);
-                    System.out.println(score);
                     state[i][j] = "";
                     if (score > bestScore) {
                         bestScore = score;
@@ -125,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
+//        System.out.println("Final best score" + bestScore);
         buttons[bestMove[0]][bestMove[1]].setText("O");
     }
 
@@ -157,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
             }
+//            System.out.println("Maximiser Iteration " +bestScore);
             return bestScore;
         }
         else {
@@ -171,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
             }
+//            System.out.println("Minimiser Iteration " +bestScore);
             return bestScore;
         }
     }
@@ -180,16 +173,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return 1;
         }
         // AI won
-        if (checkForWin(state) == 2){
+        else if (checkForWin(state) == 2){
             return 2;
         }
-        // 5 rounds have passed, draw
-        else if (roundCount == 5){
-            return 0;
-        }
         // No win yet
-        else{
+        else if (checkForWin(state) == -1){
             return -1;
+        }
+        // Draw
+        else {
+            return 0;
         }
     }
     // Checks if a game is won
@@ -234,8 +227,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return 2;
             }
         }
-        // No win
-        return -1;
+        // No win yet
+        for(int i = 0; i<3;i++){
+            for(int j = 0;j<3;j++){
+                if (field[i][j] == ""){
+                    return -1;
+                }
+            }
+        }
+        // Draw
+        return 0;
     }
     private void player1Wins(){
         player1Points++;
