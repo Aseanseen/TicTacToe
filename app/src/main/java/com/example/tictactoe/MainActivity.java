@@ -3,25 +3,37 @@ package com.example.tictactoe;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    Dialog myDialog;
     private Button[][] buttons = new Button[3][3];
     private Boolean player1Turn = true;
-    private int roundCount;
     private int player1Points;
     private int player2Points;
     private TextView textViewPlayer1;
     private TextView textViewPlayer2;
 
+    // Shows the explosion gif when called
+    public void showPopup(View v){
+        myDialog.setContentView(R.layout.popup);
+        myDialog.show();
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        myDialog = new Dialog(this);
         textViewPlayer1 = findViewById(R.id.text_view_p1);
         textViewPlayer2 = findViewById(R.id.text_view_p2);
         updatePointsText();
@@ -51,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (!((Button)v).getText().toString().equals("")){
             return;
         }
-        roundCount++;
         // Player 1 is X
         ((Button)v).setText("X");
         String[][] board = new String[3][3];
@@ -70,10 +81,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 board[i][j] = buttons[i][j].getText().toString();
             }
         }
+        // Updates points and show explosion gif
         switch (whoWins(board)){
-            case 0: draw(); break;
-            case 1: player1Wins(); break;
-            case 2: player2Wins(); break;
+            case 0: draw(); showPopup(v); break;
+            case 1: player1Wins(); showPopup(v); break;
+            case 2: player2Wins(); showPopup(v); break;
         }
     }
 
@@ -90,24 +102,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 state[i][j] = buttons[i][j].getText().toString();
             }
         }
-/*
-        for(int i = 0; i<3;i++){
-            for(int j = 0;j<3;j++){
-                if (state[i][j] != "") {
-                    System.out.print("I is "+ i);
-                    System.out.print(" J is "+ j);
-                    System.out.println(" State is " +state[i][j]);
-                }
-            }
-        }
-*/
+
         for(int i = 0; i<3;i++) {
             for (int j = 0; j < 3; j++) {
                 // Spot is available
                 if (state[i][j].equals("")){
+                    // AI chooses the max out of all the min that player picks
                     state[i][j] = "O";
+                    // Player's turn to minimise
                     score = minimax(state,0,false);
                     state[i][j] = "";
+                    // Keeps track of the max score and its respective move
                     if (score > bestScore) {
                         bestScore = score;
                         bestMove = new int[]{i, j};
@@ -115,10 +120,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
-//        System.out.println("Final best score" + bestScore);
+        // Changes the global buttons
         buttons[bestMove[0]][bestMove[1]].setText("O");
     }
 
+    // Minimax Algo, recursive solution
     private int minimax(String[][] state, int depth, boolean maximising) {
         int winner;
         int bestScore;
@@ -134,23 +140,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case 2: return 10 - depth;
             }
         }
+        // AI is trying to maximise score
         if (maximising) {
             bestScore = Integer.MIN_VALUE;
             for(int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     // Spot is available
                     if (state[i][j].equals("")) {
-                        // Maximising because its AI's simulated turn
                         state[i][j] = "O";
-                        // Next turn is to minimise aka Player
+                        // Next is Player's turn, wants to minimise
                         bestScore = Math.max(minimax(state, depth+1,false), bestScore);
                         state[i][j] = "";
                     }
                 }
             }
-//            System.out.println("Maximiser Iteration " +bestScore);
             return bestScore;
         }
+        // Player is trying to minimise score
         else {
             bestScore = Integer.MAX_VALUE;
             for(int i = 0; i<3;i++) {
@@ -158,12 +164,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // Spot is available
                     if (state[i][j].equals("")) {
                         state[i][j]= "X";
+                        // Next is AI's turn, wants to maximise
                         bestScore = Math.min(minimax(state, depth+1,true), bestScore);
                         state[i][j] = "";
                     }
                 }
             }
-//            System.out.println("Minimiser Iteration " +bestScore);
             return bestScore;
         }
     }
@@ -238,22 +244,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Draw
         return 0;
     }
+    // Updates point and announces winner
     private void player1Wins(){
         player1Points++;
-        // Announces the winner
         Toast.makeText(this,"Player wins!",Toast.LENGTH_SHORT).show();
         updatePointsText();
         resetBoard();
     }
+    // Updates point and announces winner
     private void player2Wins(){
         player2Points++;
-        // Announces the winner
         Toast.makeText(this,"AI wins!",Toast.LENGTH_SHORT).show();
         updatePointsText();
         resetBoard();
     }
+    // Announces draw
     private void draw(){
-        // Announces the draw
         Toast.makeText(this,"Draw!",Toast.LENGTH_SHORT).show();
         resetBoard();
     }
@@ -262,16 +268,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textViewPlayer1.setText("Player : " + player1Points);
         textViewPlayer2.setText("AI : " + player2Points);
     }
-    // Resets all the buttons back to "", round count = 0, player 1 begins again
+    // Resets all the buttons back to "", player 1 begins again
     private void resetBoard(){
         for (int i = 0; i < 3; i ++){
             for (int j = 0; j < 3; j ++){
                 buttons[i][j].setText("");
             }
         }
-        roundCount = 0;
         player1Turn = true;
     }
+    // Resets all the buttons back to "", player 1 begins again, points set to 0
     private void resetGame(){
         player1Points = 0;
         player2Points = 0;
@@ -284,7 +290,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         // Gives it a key the string "", and the variable to save under that key
-        outState.putInt("roundCount",roundCount);
         outState.putInt("player1Points",player1Points);
         outState.putInt("player2Points",player2Points);
         outState.putBoolean("player1Turn",player1Turn);
@@ -294,7 +299,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         // Gives the variables their values from the previously saved keys
-        roundCount = savedInstanceState.getInt("roundCount");
         player1Points = savedInstanceState.getInt("player1Points");
         player2Points = savedInstanceState.getInt("player2Points");
         player1Turn = savedInstanceState.getBoolean("player1Turn");
