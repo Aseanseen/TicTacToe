@@ -1,162 +1,306 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/entireScreen"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity"
-    android:background = "@drawable/konosubabackground">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/text_view_p1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:freezesText="true"
-            android:text="Player :"
-            android:textColor="#FFFFFF"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/text_view_p2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text_view_p1"
-            android:freezesText="true"
-            android:text="AI :"
-            android:textColor="#FFFFFF"
-            android:textSize="30sp" />
-
-        <Button
-            android:id="@+id/button_reset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:text="reset"/>
-    </RelativeLayout>
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    <!--Actual Screen-->
     <LinearLayout
+        android:id="@+id/entireScreen"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity"
+        android:background = "@drawable/konosubabackground">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/button_00"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="#66FFFFFF"
-            android:freezesText="true"
-            android:hapticFeedbackEnabled="true"
-            android:textColor="#E91E63"
-            android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:textColorLink="#FFFFFF"
-            android:textSize="60sp" />
+            <TextView
+                android:id="@+id/text_view_p1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nova_mono"
+                android:freezesText="true"
+                android:text="Player :"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp" />
 
-        <Button
-            android:id="@+id/button_01"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="#66FFFFFF"
-            android:freezesText="true"
-            android:hapticFeedbackEnabled="true"
-            android:textColor="#E91E63"
-            android:textSize="60sp" />
+            <TextView
+                android:id="@+id/text_view_p2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_view_p1"
+                android:fontFamily="@font/nova_mono"
+                android:freezesText="true"
+                android:text="AI :"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp" />
 
-        <Button
-            android:id="@+id/button_02"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="#66FFFFFF"
-            android:freezesText="true"
-            android:hapticFeedbackEnabled="true"
-            android:textColor="#E91E63"
-            android:textSize="60sp" />
+            <Button
+                android:id="@+id/button_reset"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:text="reset"
+                android:background="@drawable/button_style"
+                android:textColor="@color/white"
+                android:fontFamily="@font/nova_mono"/>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/button_00"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#66FFFFFF"
+                android:freezesText="true"
+                android:hapticFeedbackEnabled="true"
+                android:textColor="#E91E63"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textColorLink="#FFFFFF"
+                android:textSize="60sp" />
+
+            <Button
+                android:id="@+id/button_01"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#66FFFFFF"
+                android:freezesText="true"
+                android:hapticFeedbackEnabled="true"
+                android:textColor="#E91E63"
+                android:textSize="60sp" />
+
+            <Button
+                android:id="@+id/button_02"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#66FFFFFF"
+                android:freezesText="true"
+                android:hapticFeedbackEnabled="true"
+                android:textColor="#E91E63"
+                android:textSize="60sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/button_10"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#66FFFFFF"
+                android:freezesText="true"
+                android:hapticFeedbackEnabled="true"
+                android:textColor="#E91E63"
+                android:textSize="60sp" />
+
+            <Button
+                android:id="@+id/button_11"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#66FFFFFF"
+                android:freezesText="true"
+                android:hapticFeedbackEnabled="true"
+                android:textColor="#E91E63"
+                android:textSize="60sp" />
+
+            <Button
+                android:id="@+id/button_12"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#66FFFFFF"
+                android:freezesText="true"
+                android:hapticFeedbackEnabled="true"
+                android:textColor="#E91E63"
+                android:textSize="60sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/button_20"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#66FFFFFF"
+                android:freezesText="true"
+                android:hapticFeedbackEnabled="true"
+                android:textColor="#E91E63"
+                android:textSize="60sp" />
+
+            <Button
+                android:id="@+id/button_21"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#66FFFFFF"
+                android:freezesText="true"
+                android:hapticFeedbackEnabled="true"
+                android:textColor="#E91E63"
+                android:textSize="60sp" />
+
+            <Button
+                android:id="@+id/button_22"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#66FFFFFF"
+                android:freezesText="true"
+                android:hapticFeedbackEnabled="true"
+                android:textColor="#E91E63"
+                android:textSize="60sp" />
+        </LinearLayout>
     </LinearLayout>
+    <!--Screen Overlay-->
     <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/entireScreenOverlay"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--Blank area for scoreboard-->
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="82dp">
+        </RelativeLayout>
+        <!--1st Row images-->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
 
-        <Button
-            android:id="@+id/button_10"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="#66FFFFFF"
-            android:freezesText="true"
-            android:hapticFeedbackEnabled="true"
-            android:textColor="#E91E63"
-            android:textSize="60sp" />
+                <ImageView
+                    android:id="@+id/imageView_00"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="#66FFFFFF"
+                    android:freezesText="true"
+                    android:hapticFeedbackEnabled="true"
+                    android:textColor="#E91E63"
+                    android:textColorHighlight="#FFFFFF"
+                    android:textColorHint="#FFFFFF"
+                    android:textColorLink="#FFFFFF"
+                    android:textSize="60sp" />
 
-        <Button
-            android:id="@+id/button_11"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="#66FFFFFF"
-            android:freezesText="true"
-            android:hapticFeedbackEnabled="true"
-            android:textColor="#E91E63"
-            android:textSize="60sp" />
+                <ImageView
+                    android:id="@+id/imageView_01"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="#66FFFFFF"
+                    android:freezesText="true"
+                    android:hapticFeedbackEnabled="true"
+                    android:textColor="#E91E63"
+                    android:textSize="60sp" />
 
-        <Button
-            android:id="@+id/button_12"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="#66FFFFFF"
-            android:freezesText="true"
-            android:hapticFeedbackEnabled="true"
-            android:textColor="#E91E63"
-            android:textSize="60sp" />
+                <ImageView
+                    android:id="@+id/imageView_02"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="#66FFFFFF"
+                    android:freezesText="true"
+                    android:hapticFeedbackEnabled="true"
+                    android:textColor="#E91E63"
+                    android:textSize="60sp" />
+        </LinearLayout>
+        <!--2nd Row images-->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/imageView_10"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="#66FFFFFF"
+                    android:freezesText="true"
+                    android:hapticFeedbackEnabled="true"
+                    android:textColor="#E91E63"
+                    android:textSize="60sp" />
+
+                <ImageView
+                    android:id="@+id/imageView_11"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="#66FFFFFF"
+                    android:freezesText="true"
+                    android:hapticFeedbackEnabled="true"
+                    android:textColor="#E91E63"
+                    android:textSize="60sp" />
+
+                <ImageView
+                    android:id="@+id/imageView_12"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="#66FFFFFF"
+                    android:freezesText="true"
+                    android:hapticFeedbackEnabled="true"
+                    android:textColor="#E91E63"
+                    android:textSize="60sp" />
+        </LinearLayout>
+        <!--3rd Row images-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imageView_20"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#66FFFFFF"
+                android:freezesText="true"
+                android:hapticFeedbackEnabled="true"
+                android:textColor="#E91E63"
+                android:textSize="60sp" />
+
+            <ImageView
+                android:id="@+id/imageView_21"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#66FFFFFF"
+                android:freezesText="true"
+                android:hapticFeedbackEnabled="true"
+                android:textColor="#E91E63"
+                android:textSize="60sp" />
+
+            <ImageView
+                android:id="@+id/imageView_22"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#66FFFFFF"
+                android:freezesText="true"
+                android:hapticFeedbackEnabled="true"
+                android:textColor="#E91E63"
+                android:textSize="60sp" />
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <Button
-            android:id="@+id/button_20"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="#66FFFFFF"
-            android:freezesText="true"
-            android:hapticFeedbackEnabled="true"
-            android:textColor="#E91E63"
-            android:textSize="60sp" />
-
-        <Button
-            android:id="@+id/button_21"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="#66FFFFFF"
-            android:freezesText="true"
-            android:hapticFeedbackEnabled="true"
-            android:textColor="#E91E63"
-            android:textSize="60sp" />
-
-        <Button
-            android:id="@+id/button_22"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="#66FFFFFF"
-            android:freezesText="true"
-            android:hapticFeedbackEnabled="true"
-            android:textColor="#E91E63"
-            android:textSize="60sp" />
-    </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

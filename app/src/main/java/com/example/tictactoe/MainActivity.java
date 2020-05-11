@@ -7,16 +7,19 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Dialog myDialog;
     private Button[][] buttons = new Button[3][3];
+    private ImageView[][] buttonOverlay = new ImageView[3][3];
     private Boolean player1Turn = true;
     private int player1Points;
     private int player2Points;
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textViewPlayer1 = findViewById(R.id.text_view_p1);
         textViewPlayer2 = findViewById(R.id.text_view_p2);
         updatePointsText();
-        // Loops through all buttons
+        // Loops through all buttons and imageviews
         for(int i = 0; i<3;i++){
             for(int j = 0;j<3;j++){
                 // Dynamically calls the buttons that are in activity_main.xml
@@ -45,6 +48,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int resID = getResources().getIdentifier(buttonID,"id",getPackageName());
                 buttons[i][j] = findViewById(resID);
                 buttons[i][j].setOnClickListener(this);
+
+                // Dynamically calls the imageviews that are in activity_main.xml
+                String imageID = "imageView_" + i + j;
+                int imgID = getResources().getIdentifier(imageID,"id",getPackageName());
+                buttonOverlay[i][j] = findViewById(imgID);
             }
         }
         // Separate listener for the reset
@@ -56,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
     // Listener for tic tac toe
     @Override
     public void onClick(View v) {
@@ -70,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for(int i = 0; i<3;i++){
             for(int j = 0;j<3;j++){
                 board[i][j] = buttons[i][j].getText().toString();
+                if (board[i][j] == "X"){
+                    buttonOverlay[i][j].setImageResource(R.drawable.thecross);
+                }
             }
         }
         if (whoWins(board) == -1){
@@ -122,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         // Changes the global buttons
         buttons[bestMove[0]][bestMove[1]].setText("O");
+        buttonOverlay[bestMove[0]][bestMove[1]].setImageResource(R.drawable.circle);
     }
 
     // Minimax Algo, recursive solution
@@ -273,6 +286,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < 3; i ++){
             for (int j = 0; j < 3; j ++){
                 buttons[i][j].setText("");
+                buttonOverlay[i][j].setImageResource(android.R.color.transparent);
             }
         }
         player1Turn = true;
